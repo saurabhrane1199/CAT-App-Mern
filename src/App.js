@@ -5,9 +5,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {Route,BrowserRouter as Router,Link} from 'react-router-dom'
 import Login from './components/login/login.component'
 import Register from './components/register/register.component'
+import Main from './components/main.component'
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom';
 
 class App extends Component{
   render(){
+    const currentUser = this.props.currentUser;
     return (
       <Router>
               <div className="container">
@@ -29,13 +33,17 @@ class App extends Component{
           </nav>
           <br/>
         {/* <Route path="/" exact component={HomePage}/> */}
+        <Route exact path="/"  render = { () => currentUser == null ? (<Redirect to='/login'/>) :  (<Main/>)}/>
         <Route path="/login" exact component={Login}/>
         <Route path="/register" exact component={Register}/>
         </div>
-      </Router>
-    )
+      </Router>)
   }
 
 }
 
-export default App;
+const mapStateToProps = ({user}) => ({
+  currentUser : user.currentUser,
+});
+
+export default connect(mapStateToProps)(App);

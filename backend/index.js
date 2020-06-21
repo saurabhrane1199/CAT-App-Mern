@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
     res.send('Hello JWT')
 })
 
-app.use('/users', require('./userRoutes'))
+app.use('/users', require('./user_api/userRoutes'))
 
 app.listen(PORT,()=>{
     console.log("Server is running on Port\n"+PORT);

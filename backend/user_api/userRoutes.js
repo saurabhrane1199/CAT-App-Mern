@@ -23,7 +23,7 @@ router.post('/login',({body},res)=>{
         }
         else{
             bcrypt.compare(body.password, user.password)
-            .then(passwordMatch => passwordMatch ? res.status(200).send(`Hello ${user.username}`) : res.sendStatus(204))
+            .then(passwordMatch => passwordMatch ? res.json(user).status(200).send(user) : res.sendStatus(204))
         }
         ;
     })

@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import {connect} from 'react-redux'
+import { setCurrentUser } from '../../redux/user/user.actions';
 
 class Login extends Component{
+
     constructor(props){
         super(props)
         this.state = {
@@ -27,6 +30,9 @@ class Login extends Component{
       };
     
       onSubmit = async (e) => {
+
+        const {setCurrentUser, history} = this.props;
+
         e.preventDefault();
         const data = {
           username: this.state.username,
@@ -36,8 +42,10 @@ class Login extends Component{
         axios.post('http://localhost:4000/users/login',data)
         .then(res => {
           console.log(res.data)
-          this.setState({redirect : '/MainPage'})
+          setCurrentUser(res.data)
+          history.push('/')
         });
+
 
         this.setState({
           name : '',
@@ -48,9 +56,6 @@ class Login extends Component{
       };
 
     render(){
-      if (this.state.redirect) {
-        return <Redirect to={this.state.redirect} />
-      }
         return (
             <div className="Login">
             <h1> Login </h1> 
@@ -99,23 +104,11 @@ class Login extends Component{
   
         )
     }
-
-
-
-
-
-
 }
 
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser : user => dispatch(setCurrentUser(user))
+})
 
 
-
-
-
-
-
-
-
-
-
-export default Login;
+export default withRouter(connect(null,mapDispatchToProps)(Login));
