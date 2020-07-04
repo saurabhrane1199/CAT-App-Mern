@@ -1,0 +1,27 @@
+.testBlock-wrapper{
+    height: 600px;
+    border-radius: 10px;
+    background-color: #fcfcfc ;
+    box-shadow: 1px 1px 5px #656566;
+
+    .question-statement{
+        margin: 10px;
+        height: 100px;
+        padding: 30px 5px;
+        text-align: center;
+        font-size: 25px;
+        background-color: red;
+    }
+
+    .options{
+        height: 320px;
+        background-color: green;
+    }
+
+    .action-block{
+        height: 140px;
+        background-color: blue;
+
+    }
+
+}

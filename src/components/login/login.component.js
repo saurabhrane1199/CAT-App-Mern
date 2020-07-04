@@ -13,7 +13,7 @@ class Login extends Component{
             password : '',
             name : '',
             category : '',
-            redirect : null,
+            error : '',
         }
     }
 
@@ -41,9 +41,14 @@ class Login extends Component{
 
         axios.post('http://localhost:4000/users/login',data)
         .then(res => {
-          console.log(res.data)
-          setCurrentUser(res.data)
-          history.push('/')
+          if(res.status === 200){
+            console.log(res.data)
+            setCurrentUser(res.data)
+            history.push('/')
+          }
+          else{
+            this.setState({error:'Username is wrong or password is incorrect'})
+          }
         });
 
 
@@ -52,6 +57,7 @@ class Login extends Component{
           username: '',
           password: '',
           category: '',
+          error:'',
         });
       };
 
@@ -96,7 +102,7 @@ class Login extends Component{
                       Login    
                   </button>
                 </div>
-                   
+                <p>{this.state.error}</p>
               </div>
                
             </form>

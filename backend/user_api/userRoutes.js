@@ -16,14 +16,16 @@ router.post('/register', (req,res,next) =>{
 router.post('/login',({body},res)=>{
     User.findOne({username:body.username})
     .then(user => {
-        console.log("user from login",user)
         if(!user){
-            res.status(204).send("No username")
-            
+            res.status(500).send("User Not Found")
         }
         else{
+            console.log("User from login",user)
             bcrypt.compare(body.password, user.password)
-            .then(passwordMatch => passwordMatch ? res.json(user).status(200).send(user) : res.sendStatus(204))
+            .then(
+                passwordMatch => passwordMatch ? res.status(200).json(user) : res.status(500).send("No record found")
+                )
+            .catch(err =>res.status(400).send(err))
         }
         ;
     })

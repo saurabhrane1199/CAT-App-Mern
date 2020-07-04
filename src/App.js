@@ -5,6 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {Route,BrowserRouter as Router,Link} from 'react-router-dom'
 import Login from './components/login/login.component'
 import Register from './components/register/register.component'
+import TestBlock from './components/TestBlock/testblock.component'
+
 import Main from './components/main.component'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom';
@@ -14,7 +16,7 @@ class App extends Component{
     const currentUser = this.props.currentUser;
     return (
       <Router>
-              <div className="container">
+              <div className="container-fluid">
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <a className="navbar-brand" href="https://codingthesmartway.com">
               <img src={logo} width="30" height="30" alt="CodingTheSmartWay.com" />
@@ -36,6 +38,7 @@ class App extends Component{
         <Route exact path="/"  render = { () => currentUser == null ? (<Redirect to='/login'/>) :  (<Main/>)}/>
         <Route path="/login" exact component={Login}/>
         <Route path="/register" exact component={Register}/>
+        <Route path="/test" exact component={TestBlock}/>
         </div>
       </Router>)
   }
