@@ -7,13 +7,16 @@ import Login from './components/login/login.component'
 import Register from './components/register/register.component'
 import TestBlock from './components/TestBlock/testblock.component'
 
+import { resetCurrentUser } from './redux/user/user.actions';
+
 import Main from './components/main.component'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom';
 
 class App extends Component{
+
   render(){
-    const currentUser = this.props.currentUser;
+    const {currentUser, resetCurrentUser} = this.props;
     return (
       <Router>
               <div className="container-fluid">
@@ -29,6 +32,9 @@ class App extends Component{
                 </li>
                 <li className="navbar-item">
                   <Link to="/create" className="nav-link">Create Todo</Link>
+                </li>
+                <li>
+                  <button className="btn btn-default" onClick = {() => resetCurrentUser()}>Sign Out</button>
                 </li>
               </ul>
             </div>
@@ -49,4 +55,10 @@ const mapStateToProps = ({user}) => ({
   currentUser : user.currentUser,
 });
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => ({
+  resetCurrentUser : () => dispatch(resetCurrentUser())
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);
+
+// export default connect(mapStateToProps)(App);

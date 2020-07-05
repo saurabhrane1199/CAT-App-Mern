@@ -13,7 +13,6 @@ class Login extends Component{
             password : '',
             name : '',
             category : '',
-            error : '',
         }
     }
 
@@ -29,7 +28,7 @@ class Login extends Component{
         });
       };
     
-      onSubmit = async (e) => {
+      onSubmit = (e) => {
 
         const {setCurrentUser, history} = this.props;
 
@@ -46,10 +45,8 @@ class Login extends Component{
             setCurrentUser(res.data)
             history.push('/')
           }
-          else{
-            this.setState({error:'Username is wrong or password is incorrect'})
-          }
-        });
+        })
+        .catch( e => console.log(e));
 
 
         this.setState({
@@ -57,9 +54,10 @@ class Login extends Component{
           username: '',
           password: '',
           category: '',
-          error:'',
         });
-      };
+
+
+      }
 
     render(){
         return (
@@ -102,7 +100,6 @@ class Login extends Component{
                       Login    
                   </button>
                 </div>
-                <p>{this.state.error}</p>
               </div>
                
             </form>

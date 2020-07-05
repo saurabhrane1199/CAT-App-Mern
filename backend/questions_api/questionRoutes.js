@@ -16,8 +16,14 @@ conn.connect( err => {
     console.log("MySQL Connection Succesful")
 });
 
-router.get('/get/:subject/:diff', (req,res,next) => {
-    let query = `SELECT * FROM ${req.params.subject} where value=${req.params.diff} ORDER BY RAND() LIMIT 5`
+router.get('/get/:subject', (req,res) => {
+    let query = `(SELECT * FROM ${req.params.subject} where value=-1 ORDER BY RAND() LIMIT 4)
+                    UNION
+                    (SELECT * FROM ${req.params.subject} where value=0 ORDER BY RAND() LIMIT 4)
+                    UNION
+                    (SELECT * FROM ${req.params.subject} where value=1 ORDER BY RAND() LIMIT 4)`
+
+                    
     conn.query(query, (err,result, fields) => {
         if(err){
             res.status(400)

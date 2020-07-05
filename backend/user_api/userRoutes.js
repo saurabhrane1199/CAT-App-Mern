@@ -13,15 +13,16 @@ router.post('/register', (req,res,next) =>{
     })
 });
 
-router.post('/login',({body},res)=>{
-    User.findOne({username:body.username})
+router.post('/login',(req,res)=>{
+    User.findOne({username: req.body.username})
     .then(user => {
+        console.log("User info", user)
         if(!user){
-            res.status(500).send("User Not Found")
+            res.status(850).send("User Not Found")
         }
         else{
             console.log("User from login",user)
-            bcrypt.compare(body.password, user.password)
+            bcrypt.compare(req.body.password, user.password)
             .then(
                 passwordMatch => passwordMatch ? res.status(200).json(user) : res.status(500).send("No record found")
                 )
