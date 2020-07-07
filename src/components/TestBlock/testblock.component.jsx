@@ -21,11 +21,15 @@ function setDifficulty(action, diff){
 }
 
 function getQuestion(questions,questions_attempted, diff){
-    questions_attempted = Array(questions_attempted)
-        if(questions!==undefined){
+        if(questions!==undefined && questions_attempted!==null){
                 let question = questions.find(
-                    (item) => item.value === diff && !(questions_attempted.includes(item.q_id)));
+                    (item) => item.value === diff && !(questions_attempted.includes(item.q_id)))
                     return(question)
+        }
+        else if(questions_attempted === null){
+            let question = questions.find(
+                (item) => item.value === diff)
+                return(question)
         }
     
     }
@@ -36,9 +40,7 @@ class TestBlock extends React.Component{
         this.state = {
             score : 0,
             difficulty : 0,
-            total:10,
-            qno : 1,
-            questions_attempted : Array([])
+            questions_attempted : []
         }
     }
 
@@ -48,7 +50,7 @@ class TestBlock extends React.Component{
             console.log(res.data)
              this.setState({
                 questions : res.data,
-                current : res.data[0],
+                current : getQuestion(res.data,null,0)
             });
         })
         .catch(err => console.log(err))
@@ -63,31 +65,43 @@ class TestBlock extends React.Component{
 
     handleSubmit = event => {
         event.preventDefault();
-        const {qno,answerSelected, current, questions, difficulty, questions_attempted} = this.state;
-        let updateQno = qno+1;
+        
+        const {answerSelected, current, questions, difficulty, questions_attempted} = this.state;
+        
+        if(questions_attempted!=null)
+        
         if(answerSelected === current.answer){
+
             let updatedDifficulty = setDifficulty("positive", difficulty)
-            let updated_questions_attempted = Array(questions_attempted).push(current.q_id)
-            console.log("updatedDifficulty", updatedDifficulty)
+            let updated_questions_attempted = [...questions_attempted,current.q_id]
             let question = getQuestion(questions,updated_questions_attempted,updatedDifficulty);
+
+            console.log("updatedDifficulty", updatedDifficulty)
             console.log("Questionsss", question)
+            console.log("Questions Attempted",updated_questions_attempted)
+
             this.setState( state => ({
                 score : state.score + state.current.marks,
                 questions_attempted : updated_questions_attempted,
                 current : question,
                 answerSelected : null,
-                qno : updateQno,
-            }));            
+            }));
+
         }
         else{
             let updatedDifficulty = setDifficulty("negative", difficulty)
-            let question = getQuestion(questions,questions_attempted, updatedDifficulty);
+            let updated_questions_attempted = [...questions_attempted,current.q_id]
+            let question = getQuestion(questions,updated_questions_attempted,updatedDifficulty);
+
+            console.log("updatedDifficulty", updatedDifficulty)
+            console.log("Questionsss", question)
+            console.log("Questions Attempted",updated_questions_attempted)
+
             this.setState( state => ({
-                score : state.score,
-                questions_attempted :   Array(state.questions_attempted).push(current.q_id),
+                score : state.score + state.current.marks,
+                questions_attempted : updated_questions_attempted,
                 current : question,
                 answerSelected : null,
-                qno : updateQno,
             }));
         }
     }
