@@ -6,6 +6,7 @@ import {Route,BrowserRouter as Router,Link} from 'react-router-dom'
 import Login from './components/login/login.component'
 import Register from './components/register/register.component'
 import TestBlock from './components/TestBlock/testblock.component'
+import ScoreCard from './components/scorecard/scorecard.component'
 
 import { resetCurrentUser } from './redux/user/user.actions';
 
@@ -45,6 +46,7 @@ class App extends Component{
         <Route path="/login" exact component={Login}/>
         <Route path="/register" exact component={Register}/>
         <Route path="/test" exact component={TestBlock}/>
+        <Route path="/score" exact component={ ScoreCard } />
         </div>
       </Router>)
   }

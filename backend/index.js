@@ -5,6 +5,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const PORT = 4000;
 const morgan = require('morgan')
+const conn = require('./mysqlconn');
 
 
 app.use(cors())
@@ -23,6 +24,8 @@ app.get('/', (req, res) => {
 app.use('/users', require('./user_api/userRoutes'))
 
 app.use('/questions', require('./questions_api/questionRoutes'))
+
+app.use('/test', require('./result_api/resultRoutes'))
 
 app.listen(PORT,()=>{
     console.log("Server is running on Port\n"+PORT);

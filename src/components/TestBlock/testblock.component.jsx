@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import {withRouter} from 'react-router-dom';
 
 import './testblock.styles.scss';
 
@@ -40,7 +41,9 @@ class TestBlock extends React.Component{
         this.state = {
             score : 0,
             difficulty : 0,
-            questions_attempted : []
+            questions_attempted : [],
+            wrongQuestions : [],
+            totalScore : 0,
         }
     }
 
@@ -66,13 +69,19 @@ class TestBlock extends React.Component{
     handleSubmit = event => {
         event.preventDefault();
         
-        const {answerSelected, current, questions, difficulty, questions_attempted} = this.state;
-        
-        if(questions_attempted!=null)
-        
-        if(answerSelected === current.answer){
+        const {answerSelected, current, questions, difficulty, questions_attempted, score, totalScore, wrongQuestions} = this.state;
+        const {history} = this.props;
 
-            let updatedDifficulty = setDifficulty("positive", difficulty)
+        
+        let diffAction = 'neutral';
+        let marksToUpdate = 0;
+
+        if(answerSelected !== null){
+            diffAction = answerSelected === current.answer ? 'positive' : 'negative' ;
+            marksToUpdate = answerSelected === current.answer ? current.marks :  0;    
+        }
+
+        let updatedDifficulty = setDifficulty(diffAction, difficulty)
             let updated_questions_attempted = [...questions_attempted,current.q_id]
             let question = getQuestion(questions,updated_questions_attempted,updatedDifficulty);
 
@@ -81,36 +90,37 @@ class TestBlock extends React.Component{
             console.log("Questions Attempted",updated_questions_attempted)
 
             this.setState( state => ({
-                score : state.score + state.current.marks,
+                score : state.score + marksToUpdate,
+                totalScore : state.totalScore + current.marks,
                 questions_attempted : updated_questions_attempted,
                 current : question,
+                wrongQuestions : [...state.wrongQuestions, answerSelected === current.answer ? null : current.q_id],
                 answerSelected : null,
-            }));
-
-        }
-        else{
-            let updatedDifficulty = setDifficulty("negative", difficulty)
-            let updated_questions_attempted = [...questions_attempted,current.q_id]
-            let question = getQuestion(questions,updated_questions_attempted,updatedDifficulty);
-
-            console.log("updatedDifficulty", updatedDifficulty)
-            console.log("Questionsss", question)
-            console.log("Questions Attempted",updated_questions_attempted)
-
-            this.setState( state => ({
-                score : state.score + state.current.marks,
-                questions_attempted : updated_questions_attempted,
-                current : question,
-                answerSelected : null,
-            }));
-        }
+            }), () =>{
+                if(updated_questions_attempted.length === 5){
+            
+                    history.push('/score',
+                            {data : {
+                                score : this.state.score,
+                                totalScore : this.state.totalScore,
+                                questionsAttempted : this.state.questions_attempted,
+                                wrongQuestions : this.state.wrongQuestions,
+                            }
+                        }
+        
+                    )
+                    
+                }
+            });
+    
     }
 
 
 
     render(){
-        const {current} = this.state;
-        console.log("Current", current)
+        const {current, answerSelected, score} = this.state;
+        console.log("Current", current);
+        console.log("Score", score)
         return (
             current ? (
                 <div className="container testBlock-wrapper">
@@ -121,25 +131,25 @@ class TestBlock extends React.Component{
                         <form>
                             <div className="radio">
                                 <label>
-                                    <input type="radio" name="answer" value="a" onChange={this.handleChange} />
+                                    <input type="radio" name="answer" value="a" onChange={this.handleChange} checked={ answerSelected==='a' ? true : false } />
                                     {current.a}
                         </label>
                             </div>
                             <div className="radio">
                                 <label>
-                                    <input type="radio" name="answer" value="b" onChange={this.handleChange}/>
+                                    <input type="radio" name="answer" value="b" onChange={this.handleChange} checked={ answerSelected==='b' ? true : false }/>
                                     {current.b}
                                 </label>
                             </div>
                             <div className="radio">
                                 <label>
-                                    <input type="radio" name="answer" value="c" onChange={this.handleChange}/>
+                                    <input type="radio" name="answer" value="c" onChange={this.handleChange} checked={ answerSelected==='c' ? true : false }/>
                                     {current.c}
                                 </label>
                             </div>
                             <div className="radio">
                                 <label>
-                                    <input type="radio" name="answer" value="d" onChange={this.handleChange} />
+                                    <input type="radio" name="answer" value="d" onChange={this.handleChange} checked={ answerSelected==='d' ? true : false }/>
                                     {current.d}
                                 </label>
                             </div>
@@ -157,4 +167,4 @@ class TestBlock extends React.Component{
     }
 }
 
-export default TestBlock;
+export default withRouter(TestBlock);
