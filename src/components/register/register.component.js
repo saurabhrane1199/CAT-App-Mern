@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
-
+import  server from '../../serverconfig';
 
 
 class Register extends Component{
@@ -50,7 +50,7 @@ class Register extends Component{
           category : this.state.category,
         };
 
-        axios.post('http://localhost:4000/users/register', data)
+        axios.post(`${server}/users/register`, data)
             .then(res => console.log(res.data));
 
             this.setState({

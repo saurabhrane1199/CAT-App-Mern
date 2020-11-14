@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import  server from '../../serverconfig';
 
 
 class Quiz extends React.Component{
@@ -16,7 +17,7 @@ class Quiz extends React.Component{
 
 
     componentDidMount(){
-        axios.get('http://localhost:4000/questions/get/maths')
+        axios.get(`${server}/questions/get/maths`)
         .then( async res => {
             console.log(res.data)
             let question = await this.getQuestion(res.data, 0)

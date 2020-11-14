@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
+import  server from '../../serverconfig';
 
 import './testblock.styles.scss';
 
@@ -48,7 +49,7 @@ class TestBlock extends React.Component{
     }
 
     componentDidMount(){
-        axios.get('http://localhost:4000/questions/get/maths')
+        axios.get(`${server}/questions/get/maths`)
         .then( res => {
             console.log(res.data)
              this.setState({
@@ -69,7 +70,7 @@ class TestBlock extends React.Component{
     handleSubmit = event => {
         event.preventDefault();
         
-        const {answerSelected, current, questions, difficulty, questions_attempted, score, totalScore, wrongQuestions} = this.state;
+        const {answerSelected, current, questions, difficulty, questions_attempted} = this.state;
         const {history} = this.props;
 
         

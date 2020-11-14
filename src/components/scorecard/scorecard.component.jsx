@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import ResultQuestion from '../resultQuestion/resultQuestion.component';
+import  server from '../../serverconfig';
 
 const saveResultToDB = (score, subject, totalScore, questionsAttempted, userId, wrongAnswers) => 
 
@@ -14,7 +15,7 @@ const saveResultToDB = (score, subject, totalScore, questionsAttempted, userId, 
             wrongAnswers : wrongAnswers,
         }
     
-        axios.post('http://localhost:4000/test/result', data)
+        axios.post(`${server}/test/result`, data)
             .then( res => {
                 if(res.status === 200){
                     resolve("Result Saved")
@@ -38,7 +39,7 @@ const getQuestions = (subject, questionsAttempted) => new Promise( (resolve,reje
         questionsAttempted : questionsAttempted,
     }
 
-    axios.post('http://localhost:4000/test/getQuestions',data)
+    axios.post(`${server}/test/getQuestions`,data)
         .then( res => resolve(res.data))
         .catch(err => reject(new Error("Failed" + err)))
 

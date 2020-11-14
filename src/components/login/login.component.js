@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import {connect} from 'react-redux'
 import { setCurrentUser } from '../../redux/user/user.actions';
+import './login.styles.scss'
+import  server from '../../serverconfig';
 
 class Login extends Component{
 
@@ -38,7 +40,7 @@ class Login extends Component{
           password: this.state.password,
         };
 
-        axios.post('http://localhost:4000/users/login',data)
+        axios.post(`${server}/users/login`,data)
         .then(res => {
           if(res.status === 200){
             console.log(res.data)
@@ -88,18 +90,15 @@ class Login extends Component{
                   />
                       
                 </div>
-                
-                <div className="buttons">
                   
-                  <button
-                    type="button"
+                  <input
+                    id = "loginButton"
+                    style = {{ cursor:"pointer", }}
+                    type="submit"
                     onClick={this.onSubmit}
                     className="btn btn-primary"
-                  >
-                    
-                      Login    
-                  </button>
-                </div>
+                    value="Login"
+                  />
               </div>
                
             </form>
